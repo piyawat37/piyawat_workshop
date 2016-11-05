@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.evitected.workshop.Detail_NewsActivity">
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_marginTop="15dp"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+        <TextView
+            android:text="Topic News"
+            android:textSize="15sp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaasdasdasdadsadsadaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaasd,asld asl;dk;as dkla ksldkla; ks;ldk;akls;kdl; akskd ak;skd;l aksl;kd d ;laskdl; askd;l al;skd; kalskl; kaskdl;ak;ld sad alsld;k alskd;k sakd kasdo ;aksdk ;oaksdo;as;d ksad;asko; dkas dko;asds"
+            android:textSize="15sp"
+            android:layout_margin="20dp"
+            android:lines="10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>
