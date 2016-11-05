@@ -16,4 +16,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:layout_marginTop">10dp</item>
     </style>
+    <style name="textStyle_List">
+        <item name="android:color">#000000</item>
+    </style>
 </resources>
