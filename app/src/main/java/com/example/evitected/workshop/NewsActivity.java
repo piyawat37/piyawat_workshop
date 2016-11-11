@@ -54,6 +54,7 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
+
         new loadData().execute();
     }
 
@@ -117,6 +118,8 @@ public class NewsActivity extends AppCompatActivity {
             }catch (IOException e){
                 e.printStackTrace();
             } catch (JSONException e) {
+                e.printStackTrace();
+            }catch(Exception e){
                 e.printStackTrace();
             }
             return null;

@@ -56,15 +56,17 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
     private boolean validateForm(){
-        String displayName = etDisplayName.getText().toString();
-        String username = etUsername.getText().toString();
-        String password = etPassword.getText().toString();
-        String passConfirm = etPassConfirm.getText().toString();
+        String displayName = etDisplayName.getText().toString().trim();
+        String username = etUsername.getText().toString().trim();
+        String password = etPassword.getText().toString().trim();
+        String passConfirm = etPassConfirm.getText().toString().trim();
         if(displayName.isEmpty()){ return false; }
         if(username.isEmpty()){ return false; }
         if(password.isEmpty()){ return false; }
         if(passConfirm.isEmpty()){ return false; }
-        if(password != passConfirm){ return false; }
+        if(!password.equals(passConfirm)){
+            return false;
+        }
         return true;
     }
     private class Register extends AsyncTask<Void, Void, String>{
