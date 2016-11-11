@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject resultOb = rootObj.getJSONObject("result");
                     if(resultOb.getInt("result") == 1){
                         Intent i = new Intent(MainActivity.this, NewsActivity.class);
+                        i.putExtra("resultLogin",resultOb.getInt("result"));
                         startActivity(i);
                     }else{
                         Toast.makeText(MainActivity.this, resultOb.getString("result_desc"), Toast.LENGTH_SHORT).show();

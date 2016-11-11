@@ -64,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
         if(username.isEmpty()){ return false; }
         if(password.isEmpty()){ return false; }
         if(passConfirm.isEmpty()){ return false; }
+        if(password != passConfirm){ return false; }
         return true;
     }
     private class Register extends AsyncTask<Void, Void, String>{
