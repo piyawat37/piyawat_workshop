@@ -14,6 +14,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.evitected.workshop.datamodel.News;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,6 +27,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
@@ -34,9 +37,11 @@ import okhttp3.Response;
 
 public class NewsActivity extends AppCompatActivity {
 
+
     private ListView newsList;
     //static String[] TopicNews = {"Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News", "Topic News"};
     //ArrayList<String> TopicNews;
+/*
     static String[] NewsID;
     static String[] TopicNews;
     //static String[] DateNews = {"5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559", "5 Nov 2559"};
@@ -45,7 +50,7 @@ public class NewsActivity extends AppCompatActivity {
     int[] imgID = {R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
     //static String[] imgURL;
     static String[] DescNews;
-
+*/
 
     String resultLogin = null;
     private ProgressDialog progressDialog;
@@ -54,30 +59,92 @@ public class NewsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
-
+        newsList = (ListView) findViewById(R.id.newsList);
         new loadData().execute();
     }
 
-    private void customAdap() {
-        newsList = (ListView) findViewById(R.id.newsList);
-        newsList.setAdapter(new CustomAdapter(getApplicationContext(), TopicNews, DateNews, imgID));
-    }
-    private void setEvent() {
-        newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(NewsActivity.this, Detail_NewsActivity.class);
-                i.putExtra("news_id",(int) id);
-                startActivity(i);
-                finish();
+    public class loadData extends AsyncTask<Void, Void, String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = new ProgressDialog(NewsActivity.this);
+            progressDialog.setCancelable(true);
+            progressDialog.setMessage("Loading...");
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progressDialog.setProgress(0);
+            progressDialog.show();
+        }
+        @Override
+        protected String doInBackground(Void... params) {
+            OkHttpClient client = new OkHttpClient();
+            Request request;
+            Response response;
+            request = new Request.Builder()
+                    .url("http://kimhun55.com/pollservices/feednews.php")
+                    .get()
+                    .build();
+            try{
+                response = client.newCall(request).execute();
+                if (response.isSuccessful()){
+                    return response.body().string();
+                }
+            }catch (IOException e){
+                e.printStackTrace();
             }
-        });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                JSONObject rootObj = new JSONObject(s);
+                if(rootObj.has("result")){
+                    JSONObject resultOb = rootObj.getJSONObject("result");
+                    if(resultOb.getInt("result") == 1){
+                        JSONArray jArray = rootObj.getJSONArray("news_list");
+                        if(jArray != null && jArray.length() > 0){
+                            int newsSize = jArray.length();
+                            final List<News> nNewsList = new ArrayList<>();
+                            for(int i = 0 ; i < newsSize; i++){
+                                News news = new News();
+                                JSONObject newsJsObj = jArray.getJSONObject(i);
+                                news.setNewsId(newsJsObj.getString("news_id"));
+                                news.setTitle(newsJsObj.getString("title"));
+                                news.setCreateDate(newsJsObj.getString("create_date"));
+                                news.setShortDesc(newsJsObj.getString("short_description"));
+                                news.setImageUrl(newsJsObj.getString("image_url"));
+                                nNewsList.add(news);
+                            }
+                            newsList.setAdapter(new CustomAdapter(getApplicationContext(),nNewsList));
+                            progressDialog.dismiss();
+
+                            newsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Intent i = new Intent(NewsActivity.this, Detail_NewsActivity.class);
+                                    i.putExtra("news_id", nNewsList.get(position).getNewsId());
+                                    startActivity(i);
+                                    finish();
+                                }
+                            });
+                        }
+                    }else{
+
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
+    /*
     public class loadData extends AsyncTask<String, String, Void>{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
             progressDialog = new ProgressDialog(NewsActivity.this);
             progressDialog.setCancelable(true);
             progressDialog.setMessage("Loading...");
@@ -129,6 +196,5 @@ public class NewsActivity extends AppCompatActivity {
             super.onPostExecute(aVoid);
             progressDialog.dismiss();
         }
-    }
-
+    }*/
 }
